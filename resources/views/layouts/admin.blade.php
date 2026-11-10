@@ -63,8 +63,19 @@
                 <span>Dashboard Ringkasan</span>
             </a>
 
+            <a href="{{ route('admin.links') }}" 
+               class="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-colors {{ request()->routeIs('admin.links') ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-800/80 hover:text-white' }}">
+                <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                    </svg>
+                    <span>Kumpulan Link Penting</span>
+                </div>
+                <span class="px-2 py-0.5 text-[10px] font-bold rounded-md bg-amber-400/20 text-amber-300 border border-amber-400/30">Hub</span>
+            </a>
+
             <a href="{{ route('admin.events.index') }}" 
-               class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors {{ request()->routeIs('admin.events.*') ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-800/80 hover:text-white' }}">
+               class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors {{ request()->routeIs('admin.events.index') || request()->routeIs('admin.events.edit') || request()->routeIs('admin.events.attendances.*') ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-800/80 hover:text-white' }}">
                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
@@ -127,10 +138,35 @@
                 <h1 class="text-lg font-bold text-slate-800 tracking-tight">{{ $headerTitle ?? 'Dashboard Superadmin' }}</h1>
             </div>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2.5 sm:gap-3">
+                <!-- Live WIB Time Badge -->
+                <div class="hidden md:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200"
+                     x-data="{ time: '{{ now()->format('H:i:s') }}' }"
+                     x-init="setInterval(() => {
+                         const d = new Date();
+                         const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+                         const wib = new Date(utc + (3600000 * 7));
+                         time = wib.toTimeString().split(' ')[0];
+                     }, 1000)">
+                    <svg class="w-3.5 h-3.5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span class="font-mono font-semibold" x-text="time">{{ now()->format('H:i:s') }}</span>
+                    <span class="text-[10px] font-bold text-indigo-700 bg-indigo-100 px-1.5 py-0.5 rounded">WIB (UTC+7)</span>
+                </div>
+
+                <!-- Quick Link Hub Button -->
+                <a href="{{ route('admin.links') }}" 
+                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition-colors">
+                    <svg class="w-3.5 h-3.5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                    </svg>
+                    <span>Kumpulan Link</span>
+                </a>
+
                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    Role: Superadmin
+                    Superadmin
                 </span>
             </div>
         </header>

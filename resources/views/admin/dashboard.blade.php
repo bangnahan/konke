@@ -58,6 +58,34 @@
         </div>
     </div>
 
+    <!-- Quick Links Hub Banner -->
+    <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-3xl p-6 text-white border border-indigo-900/40 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-indigo-500/20 text-indigo-300 flex items-center justify-center shrink-0 border border-indigo-400/20">
+                <svg class="w-6 h-6 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="font-extrabold text-white text-base">Pusat Kumpulan Link & Navigasi Cepat</h3>
+                <p class="text-xs text-indigo-200 mt-0.5">Akses cepat dan salin seluruh link formulir peserta, scanner panitia, laporan, dan pin Google Maps.</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3 shrink-0">
+            <div class="hidden lg:flex flex-col text-right pr-3 border-r border-slate-700">
+                <span class="text-[11px] text-slate-400">Waktu Sistem:</span>
+                <span class="text-xs font-mono font-bold text-amber-300">WIB (UTC+7)</span>
+            </div>
+            <a href="{{ route('admin.links') }}" 
+               class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-md shadow-indigo-600/30 transition-all cursor-pointer">
+                <span>Buka Kumpulan Link</span>
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+            </a>
+        </div>
+    </div>
+
     <!-- Events Management Section -->
     <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
         <div class="p-6 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">

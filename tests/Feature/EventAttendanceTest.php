@@ -275,4 +275,22 @@ class EventAttendanceTest extends TestCase
         $formResponse->assertSee($mapsUrl, false);
         $formResponse->assertSee('Buka Google Maps');
     }
+
+    public function test_admin_can_access_quick_links_hub_and_timezone_is_wib(): void
+    {
+        // 1. Timezone must be Asia/Jakarta
+        $this->assertEquals('Asia/Jakarta', config('app.timezone'));
+
+        // 2. Unauthenticated user redirected to admin login
+        $this->get(route('admin.links'))->assertRedirect(route('admin.login'));
+
+        // 3. Superadmin can access links hub
+        $this->actingAs($this->superadmin);
+        $response = $this->get(route('admin.links'));
+        $response->assertStatus(200);
+        $response->assertSee('Kumpulan Link Penting Sistem');
+        $response->assertSee('WIB (UTC+7)');
+        $response->assertSee('/e/'.$this->event->slug);
+        $response->assertSee('Salin Template Undangan WA');
+    }
 }

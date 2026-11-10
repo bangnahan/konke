@@ -37,4 +37,20 @@ class DashboardController extends Controller
             'recentAttendances' => $recentAttendances,
         ]);
     }
+
+    /**
+     * Display the Quick Links Hub for all events and system navigation.
+     */
+    public function links(): View
+    {
+        $events = Event::withCount(['attendances as total_attendees', 'attendances as total_checked_in' => function ($q) {
+            $q->where('is_checked_in', true);
+        }])->latest()->get();
+
+        return view('admin.links', [
+            'events' => $events,
+            'serverTime' => now()->format('d F Y, H:i:s').' WIB',
+            'timezone' => config('app.timezone'),
+        ]);
+    }
 }

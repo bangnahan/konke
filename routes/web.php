@@ -101,6 +101,7 @@ Route::prefix('adminganteng')->group(function () {
     */
     Route::middleware('superadmin')->group(function () {
         Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+        Route::get('/links', [AdminDashboardController::class, 'links'])->name('admin.links');
 
         // Events CRUD
         Route::resource('events', AdminEventController::class, ['as' => 'admin']);
