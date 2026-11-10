@@ -91,7 +91,7 @@ class ExportService
         $sheet->setCellValue('A2', 'Nama Acara: '.$event->title);
         $sheet->setCellValue('A3', 'Tanggal Acara: '.($event->event_date ? $event->event_date->format('d F Y') : '-'));
         $sheet->setCellValue('A4', 'Lokasi: '.($event->location ?? '-'));
-        $sheet->setCellValue('A5', 'Waktu Unduh: '.now()->format('d/m/Y H:i:s'));
+        $sheet->setCellValue('A5', 'Waktu Unduh: '.now()->format('d/m/Y H:i:s').' WIB');
 
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
         $sheet->getStyle('A2:A5')->getFont()->setSize(11);
