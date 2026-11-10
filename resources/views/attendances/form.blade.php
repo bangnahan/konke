@@ -55,18 +55,34 @@
                     </div>
                 @endif
 
-                @if($event->location)
-                    <div class="flex items-center gap-2.5 sm:col-span-2">
-                        <div class="w-8 h-8 rounded-lg bg-indigo-600/50 flex items-center justify-center shrink-0">
-                            <svg class="w-4 h-4 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
+                @if($event->location || $event->maps_url)
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:col-span-2 bg-indigo-950/40 p-3.5 rounded-2xl border border-indigo-500/20">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-8 h-8 rounded-lg bg-indigo-600/50 flex items-center justify-center shrink-0">
+                                <svg class="w-4 h-4 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="block text-[11px] text-indigo-300 font-medium">Tempat / Lokasi Acara</span>
+                                <span class="font-semibold text-white text-sm">{{ $event->location ?: 'Lihat di Peta' }}</span>
+                            </div>
                         </div>
-                        <div>
-                            <span class="block text-[11px] text-indigo-300 font-medium">Tempat / Lokasi</span>
-                            <span class="font-semibold text-white">{{ $event->location }}</span>
-                        </div>
+                        @if($event->maps_url)
+                            <a href="{{ $event->maps_url }}" 
+                               target="_blank" 
+                               rel="noopener noreferrer" 
+                               class="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white text-xs font-semibold shadow-xs transition-all shrink-0">
+                                <svg class="w-3.5 h-3.5 text-amber-300" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                                </svg>
+                                <span>Buka Google Maps</span>
+                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                            </a>
+                        @endif
                     </div>
                 @endif
             </div>

@@ -114,16 +114,33 @@
                 </div>
             </div>
 
-            <!-- Lokasi Acara -->
-            <div>
-                <label for="location" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
-                    Tempat / Lokasi Acara
-                </label>
-                <input type="text" 
-                       name="location" 
-                       id="location" 
-                       value="{{ old('location', $event->location) }}"
-                       class="block w-full px-4 py-3 text-slate-900 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-indigo-600">
+            <!-- Lokasi Acara & Link Google Maps Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div>
+                    <label for="location" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                        Tempat / Nama Gedung
+                    </label>
+                    <input type="text" 
+                           name="location" 
+                           id="location" 
+                           value="{{ old('location', $event->location) }}"
+                           placeholder="Contoh: Hotel Arya Duta Pekanbaru"
+                           class="block w-full px-4 py-3 text-slate-900 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-indigo-600">
+                </div>
+
+                <div>
+                    <label for="maps_url" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                        <span>Link Google Maps</span>
+                        <span class="text-indigo-600 font-medium normal-case">📍 Pin Lokasi</span>
+                    </label>
+                    <input type="url" 
+                           name="maps_url" 
+                           id="maps_url" 
+                           value="{{ old('maps_url', $event->maps_url) }}"
+                           placeholder="https://maps.app.goo.gl/... atau https://goo.gl/maps/..." 
+                           class="block w-full px-4 py-3 text-slate-900 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-indigo-600">
+                    <p class="text-[11px] text-slate-400 mt-1">Salin link dari tombol 'Bagikan/Share' di Google Maps.</p>
+                </div>
             </div>
 
             <!-- Pengaturan Fitur Tambahan (Checkboxes) -->

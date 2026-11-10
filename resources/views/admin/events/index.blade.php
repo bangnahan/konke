@@ -53,7 +53,16 @@
                             </td>
                             <td class="py-4 px-6 text-slate-600">
                                 <div>{{ $ev->event_date ? $ev->event_date->format('d M Y') : 'Jadwal belum ditentukan' }}</div>
-                                <div class="text-[11px] text-slate-400 truncate max-w-xs">{{ $ev->location ?? '-' }}</div>
+                                <div class="text-[11px] text-slate-400 truncate max-w-xs flex items-center gap-1 mt-0.5">
+                                    <span>{{ $ev->location ?? '-' }}</span>
+                                    @if($ev->maps_url)
+                                        <a href="{{ $ev->maps_url }}" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 inline-flex items-center" title="Buka di Google Maps">
+                                            <svg class="w-3.5 h-3.5 text-amber-500 hover:text-amber-600" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                                            </svg>
+                                        </a>
+                                    @endif
+                                </div>
                             </td>
                             <td class="py-4 px-6 text-center">
                                 @if($ev->is_active)

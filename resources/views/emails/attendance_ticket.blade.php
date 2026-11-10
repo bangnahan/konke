@@ -107,6 +107,13 @@
             <p style="text-transform: uppercase; letter-spacing: 1px; font-weight: bold; margin-bottom: 6px;">E-Tiket & Bukti Kehadiran</p>
             <h1>{{ $event->title }}</h1>
             <p>{{ $event->event_date ? $event->event_date->format('l, d F Y') : '-' }} &bull; {{ $event->location ?? '-' }}</p>
+            @if($event->maps_url)
+                <div style="margin-top: 12px;">
+                    <a href="{{ $event->maps_url }}" target="_blank" style="display: inline-block; background-color: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); color: #ffffff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: bold;">
+                        📍 Buka Petunjuk Arah Google Maps
+                    </a>
+                </div>
+            @endif
         </div>
 
         <!-- Body -->
@@ -153,6 +160,17 @@
                     <td class="label">Status Konfirmasi:</td>
                     <td class="val">{{ $attendance->status_label }}</td>
                 </tr>
+                @if($event->location)
+                <tr>
+                    <td class="label">Lokasi Acara:</td>
+                    <td class="val">
+                        {{ $event->location }}
+                        @if($event->maps_url)
+                            <br><a href="{{ $event->maps_url }}" target="_blank" style="color: #4338ca; text-decoration: underline; font-size: 12px; font-weight: normal;">📍 Klik untuk navigasi Google Maps</a>
+                        @endif
+                    </td>
+                </tr>
+                @endif
             </table>
 
             <p style="font-size: 12px; color: #64748b; line-height: 1.5; text-align: center;">

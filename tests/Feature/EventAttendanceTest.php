@@ -248,4 +248,31 @@ class EventAttendanceTest extends TestCase
         $pdfResponse->assertStatus(200);
         $this->assertStringContainsString('application/pdf', $pdfResponse->headers->get('Content-Type'));
     }
+
+    public function test_can_set_google_maps_url_and_render_navigation_link(): void
+    {
+        $this->actingAs($this->superadmin);
+
+        // Update event with Google Maps URL
+        $mapsUrl = 'https://maps.app.goo.gl/example123';
+        $response = $this->put(route('admin.events.update', ['event' => $this->event->id]), [
+            'title' => $this->event->title,
+            'slug' => $this->event->slug,
+            'location' => 'Hotel Grand Central Pekanbaru',
+            'maps_url' => $mapsUrl,
+            'is_active' => true,
+        ]);
+
+        $response->assertRedirect(route('admin.events.index'));
+        $this->assertDatabaseHas('events', [
+            'id' => $this->event->id,
+            'maps_url' => $mapsUrl,
+        ]);
+
+        // Public attendance form should display the Google Maps link
+        $formResponse = $this->get(route('attendance.form', ['slug' => $this->event->slug]));
+        $formResponse->assertStatus(200);
+        $formResponse->assertSee($mapsUrl, false);
+        $formResponse->assertSee('Buka Google Maps');
+    }
 }

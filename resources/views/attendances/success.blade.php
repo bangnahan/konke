@@ -25,6 +25,28 @@
             </div>
             <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-white mb-1">{{ $event->title }}</h2>
             <p class="text-xs text-indigo-200">{{ $event->event_date ? $event->event_date->format('l, d F Y') : 'Jadwal Ditentukan Panitia' }}</p>
+            @if($event->location)
+                <p class="text-xs text-indigo-200 mt-1 flex items-center justify-center gap-1">
+                    <svg class="w-3.5 h-3.5 text-indigo-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span>{{ $event->location }}</span>
+                </p>
+            @endif
+            @if($event->maps_url)
+                <div class="mt-3">
+                    <a href="{{ $event->maps_url }}" 
+                       target="_blank" 
+                       rel="noopener noreferrer" 
+                       class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-semibold backdrop-blur-sm transition-all border border-white/20 shadow-xs">
+                        <svg class="w-3.5 h-3.5 text-amber-300" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                        </svg>
+                        <span>Petunjuk Arah Google Maps &rarr;</span>
+                    </a>
+                </div>
+            @endif
         </div>
 
         <!-- Ticket Body with QR Code -->
@@ -101,10 +123,22 @@
             </div>
         </div>
 
-        <!-- Action Buttons (Print & Download) -->
-        <div class="p-6 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row gap-3 justify-center">
+        <!-- Action Buttons (Print, Download & Maps) -->
+        <div class="p-6 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row gap-3 justify-center items-stretch sm:items-center">
+            @if($event->maps_url)
+                <a href="{{ $event->maps_url }}" 
+                   target="_blank" 
+                   rel="noopener noreferrer" 
+                   class="btn-no-print inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm shadow-md transition-all cursor-pointer">
+                    <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Petunjuk Lokasi (Maps)</span>
+                </a>
+            @endif
+
             <a href="{{ route('attendance.qr.download', ['slug' => $event->slug, 'uuid' => $attendance->uuid]) }}" 
-               class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm shadow-md shadow-indigo-600/20 transition-all cursor-pointer">
+               class="btn-no-print inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm shadow-md shadow-indigo-600/20 transition-all cursor-pointer">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
