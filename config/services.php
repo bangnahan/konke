@@ -38,9 +38,9 @@ return [
     'mailketing' => [
         'api_key' => env('MAILKETING_API_KEY'),
         'api_token' => env('MAILKETING_API_TOKEN'),
-        'endpoint' => env('MAILKETING_ENDPOINT', 'https://api.mailketing.co.id/api/v1/send'),
-        'from_name' => env('MAILKETING_FROM_NAME', 'Event Attendance System'),
-        'from_email' => env('MAILKETING_FROM_EMAIL', 'noreply@event.com'),
+        'endpoint' => env('MAILKETING_ENDPOINT', 'https://api.mailketing.co.id/api/v2/send'),
+        'from_name' => env('MAILKETING_FROM_NAME', 'KULWIL RIAU'),
+        'from_email' => env('MAILKETING_FROM_EMAIL', 'hi@jelatix.com'),
     ],
 
 ];

@@ -21,23 +21,24 @@ class MailketingService
     public function __construct()
     {
         $this->apiKey = config('services.mailketing.api_key');
-        $this->apiToken = config('services.mailketing.api_token');
-        $this->endpoint = config('services.mailketing.endpoint', 'https://api.mailketing.co.id/api/v1/send');
-        $this->fromName = config('services.mailketing.from_name', 'Panitia Event');
-        $this->fromEmail = config('services.mailketing.from_email', 'noreply@event.com');
+        $this->apiToken = config('services.mailketing.api_token') ?: $this->apiKey;
+        $this->endpoint = config('services.mailketing.endpoint', 'https://api.mailketing.co.id/api/v2/send');
+        $this->fromName = config('services.mailketing.from_name', 'KULWIL RIAU');
+        $this->fromEmail = config('services.mailketing.from_email', 'hi@jelatix.com');
     }
 
     /**
-     * Send attendance confirmation with QR code and check-in details.
+     * Send attendance confirmation with QR code and check-in details via Mailketing API v2.
      *
      * @return array{success: bool, message: string, response: mixed}
      */
     public function sendAttendanceConfirmation(Attendance $attendance, string $qrDataUri): array
     {
-        if (empty($this->apiKey) && empty($this->apiToken)) {
-            Log::info("Mailketing API Key belum dikonfigurasi di .env. Email simulasi dikirim ke {$attendance->email}");
+        $token = $this->apiToken ?? $this->apiKey;
 
-            // Mark as simulated success so the flow is seamless
+        if (empty($token)) {
+            Log::info("Mailketing API Token belum dikonfigurasi di .env. Email simulasi dikirim ke {$attendance->email}");
+
             $attendance->update([
                 'email_sent' => false,
                 'mailketing_message_id' => 'simulated-'.now()->timestamp,
@@ -45,7 +46,7 @@ class MailketingService
 
             return [
                 'success' => false,
-                'message' => 'Mailketing API key is not configured in .env',
+                'message' => 'Mailketing API token is not configured in .env',
                 'response' => null,
             ];
         }
@@ -59,34 +60,42 @@ class MailketingService
 
         try {
             $payload = [
-                'api_key' => $this->apiKey ?? $this->apiToken,
-                'recipient' => $attendance->email,
-                'to' => $attendance->email,
-                'subject' => "Bukti Kehadiran & E-Tiket: {$event->title}",
-                'content' => $htmlContent,
-                'html' => $htmlContent,
                 'from_name' => $this->fromName,
                 'from_email' => $this->fromEmail,
+                'subject' => "Bukti Kehadiran & E-Tiket: {$event->title}",
+                'recipient' => $attendance->email,
+                'content' => $htmlContent,
+                'api_token' => $token,
             ];
 
-            $response = Http::timeout(10)->post($this->endpoint, $payload);
+            $response = Http::timeout(15)
+                ->withHeaders([
+                    'X-Api-Token' => $token,
+                    'Authorization' => 'Bearer '.$token,
+                    'Accept' => 'application/json',
+                ])
+                ->post($this->endpoint, $payload);
 
             if ($response->successful()) {
                 $data = $response->json();
+                $messageId = $data['message_id'] ?? $data['id'] ?? $data['data']['message_id'] ?? (string) now()->timestamp;
+
                 $attendance->update([
                     'email_sent' => true,
                     'email_sent_at' => now(),
-                    'mailketing_message_id' => $data['message_id'] ?? $data['id'] ?? (string) now()->timestamp,
+                    'mailketing_message_id' => (string) $messageId,
                 ]);
+
+                Log::info("Mailketing v2 success for {$attendance->email}: message_id={$messageId}");
 
                 return [
                     'success' => true,
-                    'message' => 'Email konfirmasi berhasil dikirim via Mailketing.',
+                    'message' => 'Email konfirmasi berhasil dikirim via Mailketing v2.',
                     'response' => $data,
                 ];
             }
 
-            Log::error("Mailketing send failed: {$response->status()} - {$response->body()}");
+            Log::error("Mailketing v2 send failed [{$response->status()}]: {$response->body()}");
 
             return [
                 'success' => false,
@@ -94,7 +103,7 @@ class MailketingService
                 'response' => $response->json(),
             ];
         } catch (\Throwable $e) {
-            Log::error('Mailketing exception: '.$e->getMessage());
+            Log::error('Mailketing v2 exception: '.$e->getMessage());
 
             return [
                 'success' => false,

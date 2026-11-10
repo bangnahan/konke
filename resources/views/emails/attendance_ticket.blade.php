@@ -154,7 +154,7 @@
 
         <!-- Footer -->
         <div class="footer">
-            Email ini dikirim secara otomatis oleh <strong>Panitia Event</strong> melalui Mailketing Transactional Service.
+            Email ini dikirim secara otomatis oleh <strong>KULWIL RIAU</strong> (hi@jelatix.com) melalui Mailketing Transactional Service v2.
         </div>
     </div>
 

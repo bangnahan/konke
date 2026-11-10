@@ -6,7 +6,9 @@ use App\Models\Attendance;
 use App\Models\Event;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class EventAttendanceTest extends TestCase
@@ -55,6 +57,14 @@ class EventAttendanceTest extends TestCase
 
     public function test_participant_can_submit_attendance_and_gets_qr_code(): void
     {
+        Http::fake([
+            'api.mailketing.co.id/api/v2/send' => Http::response([
+                'status' => 'success',
+                'message' => 'Email queued',
+                'message_id' => 'mailketing-v2-12345',
+            ], 200),
+        ]);
+
         $response = $this->post(route('attendance.store', ['slug' => $this->event->slug]), [
             'full_name' => 'Muhammad Rizky Pratama',
             'email' => 'rizky.pratama@gmail.com',
@@ -69,6 +79,16 @@ class EventAttendanceTest extends TestCase
         $this->assertNotNull($attendance);
         $this->assertEquals('hadir', $attendance->attendance_status);
         $this->assertNotEmpty($attendance->qr_code_token);
+        $this->assertTrue($attendance->email_sent);
+        $this->assertEquals('mailketing-v2-12345', $attendance->mailketing_message_id);
+
+        Http::assertSent(function (Request $request) {
+            return $request->url() === 'https://api.mailketing.co.id/api/v2/send' &&
+                   $request->hasHeader('X-Api-Token', '308b31d3313311776744479fa8fd7eb3') &&
+                   $request['from_email'] === 'hi@jelatix.com' &&
+                   $request['from_name'] === 'KULWIL RIAU' &&
+                   $request['recipient'] === 'rizky.pratama@gmail.com';
+        });
 
         $response->assertRedirect(route('attendance.success', [
             'slug' => $this->event->slug,
