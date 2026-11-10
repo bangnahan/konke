@@ -16,20 +16,16 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-// Homepage redirect
+// Homepage - Daftar Pilihan Event
 Route::get('/', function () {
-    // If logged in as superadmin, go to dashboard
-    if (auth()->check() && auth()->user()->isSuperAdmin()) {
-        return redirect()->route('admin.dashboard');
-    }
+    $events = Event::where('is_active', true)
+        ->orderByRaw('event_date IS NULL, event_date ASC')
+        ->latest()
+        ->get();
 
-    // If an active event exists, show the latest active event form
-    $latestEvent = Event::where('is_active', true)->latest()->first();
-    if ($latestEvent) {
-        return redirect()->route('attendance.form', ['slug' => $latestEvent->slug]);
-    }
-
-    abort(404);
+    return view('home', [
+        'events' => $events,
+    ]);
 })->name('home');
 
 /*

@@ -23,6 +23,8 @@ class ExampleTest extends TestCase
         ]);
 
         $response = $this->get('/');
-        $response->assertRedirect(route('attendance.form', ['slug' => 'test-event']));
+        $response->assertStatus(200);
+        $response->assertSee('Silakan Pilih Event yang Akan Anda Ikuti');
+        $response->assertSee('Test Event');
     }
 }
