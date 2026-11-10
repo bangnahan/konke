@@ -118,9 +118,17 @@
 
             <!-- QR Code Box -->
             <div class="qr-card">
-                <img src="{{ $qrDataUri }}" alt="QR Code Kehadiran">
-                <div style="font-size: 11px; color: #64748b; text-transform: uppercase; margin-top: 8px;">Token Check-in Anda:</div>
+                <img src="{{ $qrImageUrl ?? $qrDataUri }}" alt="QR Code Kehadiran" width="220" height="220" style="width: 220px; height: 220px; display: block; margin: 0 auto; border: 0;">
+                <div style="font-size: 11px; color: #64748b; text-transform: uppercase; margin-top: 10px;">Token Check-in Anda:</div>
                 <div class="token">{{ $attendance->qr_code_token }}</div>
+            </div>
+
+            <!-- Button Link to Online Ticket -->
+            <div style="text-align: center; margin: 20px 0;">
+                <a href="{{ route('attendance.success', ['slug' => $event->slug, 'uuid' => $attendance->uuid]) }}" 
+                   style="display: inline-block; background-color: #4338ca; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; font-size: 13px;">
+                    Buka / Simpan E-Tiket di Browser
+                </a>
             </div>
 
             <!-- Detail Data Peserta -->

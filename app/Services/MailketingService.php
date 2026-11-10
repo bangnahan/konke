@@ -52,9 +52,14 @@ class MailketingService
         }
 
         $event = $attendance->event;
+
+        // Use a public HTTPS PNG QR URL because Gmail & major email clients block inline Base64 data URIs and SVGs
+        $qrImageUrl = 'https://quickchart.io/qr?text='.urlencode($attendance->qr_code_token).'&size=260&format=png&margin=1';
+
         $htmlContent = view('emails.attendance_ticket', [
             'attendance' => $attendance,
             'event' => $event,
+            'qrImageUrl' => $qrImageUrl,
             'qrDataUri' => $qrDataUri,
         ])->render();
 
