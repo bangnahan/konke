@@ -33,3 +33,4 @@ echo "✅ DEPLOY BERHASIL!"
 echo "Aplikasi Anda sekarang aktif di: https://budayariau.jelatix.com"
 echo "Login Admin: https://budayariau.jelatix.com/adminganteng/login"
 echo "=============================================================================="
+
