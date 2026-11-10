@@ -4,15 +4,25 @@
 # ==============================================================================
 set -e
 
+# Cek apakah file .env sudah ada, jika belum salin dari .env.example
+if [ ! -f .env ]; then
+    echo "⚙️  [0/6] Menyiapkan file .env dari .env.example..."
+    cp .env.example .env
+fi
+
 echo "🚀 [1/6] Mengaktifkan Mode Maintenance Sementara..."
 php artisan down --secret="adminganteng-bypass" --render="errors::503" || true
 
 echo "📦 [2/6] Memperbarui Dependensi Composer..."
 composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction
 
+# Generate app key jika masih kosong
+php artisan key:generate --force --no-interaction
+
 echo "🗄️ [3/6] Menyiapkan Database & Menjalankan Migrasi..."
 touch database/database.sqlite
 php artisan migrate --force
+php artisan db:seed --force
 
 echo "🔗 [4/6] Memeriksa Storage Link..."
 php artisan storage:link || true
