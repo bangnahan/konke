@@ -211,10 +211,12 @@ class EventAttendanceTest extends TestCase
         // 2. Obfuscated /adminganteng/login must return 200
         $this->get('/adminganteng/login')->assertStatus(200);
 
-        // 3. Public attendance page must not reveal "Admin Login"
+        // 3. Public attendance page must not reveal "Admin Login", "Panel Panitia", or "Rekap Data"
         $publicForm = $this->get(route('attendance.form', ['slug' => $this->event->slug]));
         $publicForm->assertStatus(200);
         $publicForm->assertDontSee('Admin Login');
+        $publicForm->assertDontSee('Panel Panitia');
+        $publicForm->assertDontSee('Rekap Data');
     }
 
     public function test_can_export_report_as_csv_xlsx_and_pdf(): void

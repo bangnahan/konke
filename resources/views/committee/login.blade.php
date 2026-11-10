@@ -41,15 +41,6 @@
                 <span>Buka Scanner Kamera</span>
             </button>
         </form>
-
-        <div class="mt-6 pt-6 border-t border-slate-100 flex items-center justify-between text-xs">
-            <a href="{{ route('attendance.form', ['slug' => $event->slug]) }}" class="text-slate-500 hover:text-slate-800">
-                &larr; Form Peserta
-            </a>
-            <a href="{{ route('event.report.login', ['slug' => $event->slug]) }}" class="text-indigo-600 hover:text-indigo-800 font-medium">
-                Lihat Rekap Data &rarr;
-            </a>
-        </div>
     </div>
 </div>
 @endsection
