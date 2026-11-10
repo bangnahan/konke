@@ -82,7 +82,7 @@
     <!-- Footer -->
     <footer class="border-t border-slate-200 bg-white py-6 mt-auto">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center text-xs text-slate-500">
-            <p>&copy; {{ date('Y') }} Sistem Presensi Kehadiran Event. Powered by Laravel & Tailwind CSS.</p>
+            <p>&copy; {{ date('Y') }} Sistem Presensi Kehadiran Event.</p>
         </div>
     </footer>
 
