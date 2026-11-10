@@ -46,13 +46,13 @@
 
                 <div>
                     <label for="email" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
-                        Email Superadmin
+                        Alamat Email
                     </label>
                     <input type="email" 
                            name="email" 
                            id="email" 
                            required 
-                           value="{{ old('email', 'bangnahan@gmail.com') }}"
+                           value="{{ old('email') }}"
                            placeholder="nama@domain.com" 
                            class="block w-full px-4 py-3 text-slate-900 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition-all">
                 </div>
@@ -65,8 +65,7 @@
                            name="password" 
                            id="password" 
                            required 
-                           value="pekanbaru12"
-                           placeholder="Masukkan password..." 
+                           placeholder="••••••••••••" 
                            class="block w-full px-4 py-3 text-slate-900 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition-all">
                 </div>
 
@@ -85,12 +84,6 @@
                     <span>Masuk ke Dashboard</span>
                 </button>
             </form>
-
-            <div class="mt-6 pt-5 border-t border-slate-100 text-center">
-                <a href="{{ route('home') }}" class="text-xs text-slate-500 hover:text-indigo-600 transition-colors">
-                    &larr; Kembali ke Halaman Depan
-                </a>
-            </div>
         </div>
     </div>
 

@@ -7,6 +7,7 @@ use App\Models\Event;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -52,9 +53,10 @@ class EventController extends Controller
             'description' => ['nullable', 'string'],
             'location' => ['nullable', 'string', 'max:255'],
             'event_date' => ['nullable', 'date'],
-            'start_time' => ['nullable', 'date_format:H:i'],
-            'end_time' => ['nullable', 'date_format:H:i'],
+            'start_time' => ['nullable'],
+            'end_time' => ['nullable'],
             'access_password' => ['required', 'string', 'min:4'],
+            'banner' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:3072'],
             'is_active' => ['boolean'],
             'allow_duplicate_submission' => ['boolean'],
         ]);
@@ -62,6 +64,11 @@ class EventController extends Controller
         $slug = ! empty($validated['slug'])
             ? Str::slug($validated['slug'])
             : Str::slug($validated['title']).'-'.Str::lower(Str::random(5));
+
+        $bannerPath = null;
+        if ($request->hasFile('banner')) {
+            $bannerPath = $request->file('banner')->store('banners', 'public');
+        }
 
         $event = Event::create([
             'uuid' => (string) Str::uuid(),
@@ -72,6 +79,7 @@ class EventController extends Controller
             'event_date' => $validated['event_date'] ?? null,
             'start_time' => $validated['start_time'] ?? null,
             'end_time' => $validated['end_time'] ?? null,
+            'banner_path' => $bannerPath,
             'access_password' => Hash::make($validated['access_password']),
             'is_active' => $request->boolean('is_active', true),
             'allow_duplicate_submission' => $request->boolean('allow_duplicate_submission', false),
@@ -106,6 +114,7 @@ class EventController extends Controller
             'start_time' => ['nullable'],
             'end_time' => ['nullable'],
             'access_password' => ['nullable', 'string', 'min:4'],
+            'banner' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:3072'],
             'is_active' => ['boolean'],
             'allow_duplicate_submission' => ['boolean'],
         ]);
@@ -121,6 +130,13 @@ class EventController extends Controller
             'is_active' => $request->boolean('is_active'),
             'allow_duplicate_submission' => $request->boolean('allow_duplicate_submission'),
         ];
+
+        if ($request->hasFile('banner')) {
+            if ($event->banner_path && Storage::disk('public')->exists($event->banner_path)) {
+                Storage::disk('public')->delete($event->banner_path);
+            }
+            $updateData['banner_path'] = $request->file('banner')->store('banners', 'public');
+        }
 
         if (! empty($validated['access_password'])) {
             $updateData['access_password'] = Hash::make($validated['access_password']);
@@ -138,6 +154,9 @@ class EventController extends Controller
     public function destroy(Event $event): RedirectResponse
     {
         $title = $event->title;
+        if ($event->banner_path && Storage::disk('public')->exists($event->banner_path)) {
+            Storage::disk('public')->delete($event->banner_path);
+        }
         $event->delete();
 
         return redirect()->route('admin.events.index')

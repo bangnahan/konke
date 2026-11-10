@@ -9,7 +9,7 @@
             <p class="text-xs text-slate-500 mt-0.5">Tentukan judul, jadwal, slug URL, dan password akses untuk rekap data kehadiran.</p>
         </div>
 
-        <form action="{{ route('admin.events.store') }}" method="POST" class="space-y-6">
+        <form action="{{ route('admin.events.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
 
             <!-- Judul Event -->
@@ -127,6 +127,18 @@
                        value="{{ old('location') }}"
                        placeholder="Contoh: Auditorium Utama Gedung Graha Pekanbaru" 
                        class="block w-full px-4 py-3 text-slate-900 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-indigo-600">
+            </div>
+
+            <!-- Upload Banner Event -->
+            <div>
+                <label for="banner" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                    Banner / Poster Event <span class="text-slate-400 font-normal">(Opsional - JPEG, PNG, WEBP, Maks. 3MB)</span>
+                </label>
+                <input type="file" 
+                       name="banner" 
+                       id="banner" 
+                       accept="image/*"
+                       class="block w-full text-xs text-slate-600 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer border border-slate-200 rounded-xl bg-slate-50">
             </div>
 
             <!-- Pengaturan Fitur Tambahan (Checkboxes) -->

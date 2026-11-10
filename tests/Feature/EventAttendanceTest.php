@@ -201,6 +201,22 @@ class EventAttendanceTest extends TestCase
         $dashboard->assertSee('Seminar Transformasi Digital 2026');
     }
 
+    public function test_admin_routes_are_obfuscated_to_adminganteng_and_default_admin_returns_404(): void
+    {
+        // 1. Default /admin and /admin/login must return 404
+        $this->get('/admin')->assertStatus(404);
+        $this->get('/admin/login')->assertStatus(404);
+        $this->get('/admin/events')->assertStatus(404);
+
+        // 2. Obfuscated /adminganteng/login must return 200
+        $this->get('/adminganteng/login')->assertStatus(200);
+
+        // 3. Public attendance page must not reveal "Admin Login"
+        $publicForm = $this->get(route('attendance.form', ['slug' => $this->event->slug]));
+        $publicForm->assertStatus(200);
+        $publicForm->assertDontSee('Admin Login');
+    }
+
     public function test_can_export_report_as_csv_xlsx_and_pdf(): void
     {
         // Session passcode verified

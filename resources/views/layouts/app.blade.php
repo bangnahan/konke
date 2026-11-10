@@ -55,10 +55,6 @@
                             <span>Superadmin</span>
                         </a>
                     @endif
-                @else
-                    <a href="{{ route('admin.login') }}" class="text-xs font-medium text-slate-500 hover:text-slate-800 transition-colors">
-                        Admin Login
-                    </a>
                 @endauth
             </div>
         </div>

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Event;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -14,9 +15,14 @@ class ExampleTest extends TestCase
      */
     public function test_the_application_returns_a_successful_response(): void
     {
-        $response = $this->get('/');
+        Event::create([
+            'title' => 'Test Event',
+            'slug' => 'test-event',
+            'access_password' => bcrypt('secret'),
+            'is_active' => true,
+        ]);
 
-        // Root redirects to admin login if no events, or to event form
-        $response->assertRedirect();
+        $response = $this->get('/');
+        $response->assertRedirect(route('attendance.form', ['slug' => 'test-event']));
     }
 }

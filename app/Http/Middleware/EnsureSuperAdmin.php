@@ -14,11 +14,12 @@ class EnsureSuperAdmin
     public function handle(Request $request, Closure $next): Response
     {
         if (! auth()->check()) {
-            return redirect()->route('admin.login')->with('warning', 'Silakan login terlebih dahulu.');
+            return redirect()->route('admin.login');
         }
 
         if (! auth()->user()->isSuperAdmin()) {
-            abort(403, 'Akses ditolak. Anda tidak memiliki izin Superadmin.');
+            // Return 404 to avoid disclosing administrative existence
+            abort(404);
         }
 
         return $next($request);

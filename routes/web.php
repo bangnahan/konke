@@ -18,18 +18,18 @@ use Illuminate\Support\Facades\Route;
 
 // Homepage redirect
 Route::get('/', function () {
-    // If logged in, go to admin dashboard
-    if (auth()->check()) {
+    // If logged in as superadmin, go to dashboard
+    if (auth()->check() && auth()->user()->isSuperAdmin()) {
         return redirect()->route('admin.dashboard');
     }
 
-    // If an active event exists, show the latest active event form, else redirect to admin login
+    // If an active event exists, show the latest active event form
     $latestEvent = Event::where('is_active', true)->latest()->first();
     if ($latestEvent) {
         return redirect()->route('attendance.form', ['slug' => $latestEvent->slug]);
     }
 
-    return redirect()->route('admin.login');
+    abort(404);
 })->name('home');
 
 /*
@@ -84,13 +84,13 @@ Route::prefix('e/{slug}')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| Superadmin Authentication Routes
+| Superadmin Authentication Routes (Obfuscated Path)
 |--------------------------------------------------------------------------
 */
-Route::prefix('admin')->group(function () {
+Route::prefix('adminganteng')->group(function () {
     Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('admin.login');
     Route::post('/login', [AdminAuthController::class, 'login'])
-        ->middleware('throttle:10,1')
+        ->middleware('throttle:5,1') // Stricter brute-force protection
         ->name('admin.login.submit');
     Route::post('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
@@ -114,3 +114,12 @@ Route::prefix('admin')->group(function () {
         });
     });
 });
+
+/*
+|--------------------------------------------------------------------------
+| Stealth 404 Disguise for Default Admin Probes
+|--------------------------------------------------------------------------
+*/
+Route::any('admin{any?}', function () {
+    abort(404);
+})->where('any', '.*');
